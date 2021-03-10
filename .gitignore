@@ -1,0 +1,10 @@
+*.o
+*.obj
+*.dll
+*.a
+*.lib
+*.so
+*.d
+
+# Library
+libvec.a
