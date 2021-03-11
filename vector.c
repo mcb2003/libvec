@@ -48,6 +48,9 @@ int vec_prealloc(struct vector *vec, size_t capacity, size_t itemsz) {
 }
 
 void vec_free(struct vector *vec) {
+  if (!vec)
+    return;
+
   free(vec->data);
   vec->data = NULL;
   vec->nmem = 0;
