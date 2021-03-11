@@ -88,6 +88,19 @@ void *vec_pop(struct vector *vec, void *item) {
   return item;
 }
 
+int vec_reserve(struct vector *vec, size_t capacity) {
+  if (capacity <= vec->capacity)
+    return vec->capacity;
+
+  void *data = reallocarray(vec->data, capacity, vec->itemsz);
+  if (!data)
+    return -1;
+
+  vec->data = data;
+  vec->capacity = capacity;
+  return capacity;
+}
+
 int vec_shrink(struct vector *vec) {
   void *data = reallocarray(vec->data, vec->nmem, vec->itemsz);
   if (!data)
