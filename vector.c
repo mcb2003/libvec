@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <errno.h>
 #include <search.h>
 #include <stdlib.h>
@@ -6,10 +7,7 @@
 #include "vector.h"
 
 int vec_empty(struct vector *vec, size_t itemsz) {
-  if (!vec) {
-    errno = EINVAL;
-    return -1;
-  }
+  assert(vec);
 
   vec->data = NULL;
   vec->nmem = 0;
@@ -30,10 +28,8 @@ static size_t next_pow2(size_t n) {
 }
 
 int vec_prealloc(struct vector *vec, size_t capacity, size_t itemsz) {
-  if (!vec) {
-    errno = EINVAL;
-    return -1;
-  }
+  assert(vec);
+
   if (capacity == 0)
     return vec_empty(vec, itemsz);
 
@@ -59,12 +55,17 @@ void vec_free(struct vector *vec) {
 }
 
 void *vec_get(const struct vector *vec, size_t index) {
+  assert(vec);
+
   if (index >= vec->nmem)
     return NULL;
   return vec->data + (vec->itemsz * index);
 }
 
 void *vec_push(struct vector *vec, const void *item) {
+  assert(vec);
+  assert(item);
+
   if (vec->nmem + 1 > vec->capacity) {
     if (vec->capacity == 0)
       vec->capacity = 1;
@@ -83,6 +84,8 @@ void *vec_push(struct vector *vec, const void *item) {
 }
 
 void *vec_pop(struct vector *vec, void *item) {
+  assert(vec);
+
   if (vec->nmem == 0)
     return NULL;
 
@@ -95,7 +98,10 @@ void *vec_pop(struct vector *vec, void *item) {
 }
 
 int vec_reserve(struct vector *vec, size_t capacity) {
+  assert(vec);
+
   if (capacity <= vec->capacity)
+    // Already larger than necessary
     return vec->capacity;
 
   void *data = reallocarray(vec->data, capacity, vec->itemsz);
@@ -108,6 +114,8 @@ int vec_reserve(struct vector *vec, size_t capacity) {
 }
 
 int vec_shrink(struct vector *vec) {
+  assert(vec);
+
   void *data = reallocarray(vec->data, vec->nmem, vec->itemsz);
   if (!data)
     return -1;
@@ -118,11 +126,15 @@ int vec_shrink(struct vector *vec) {
 }
 
 inline void vec_qsort(struct vector *vec, comparison_fn_t compare) {
+  assert(vec);
+
   qsort(vec->data, vec->nmem, vec->itemsz, compare);
 }
 
 inline void *vec_lfind(const struct vector *vec, const void *key,
                        comparison_fn_t compare) {
+  assert(vec);
+
   size_t nmem = vec->nmem;
   return lfind(key, vec->data, &nmem, vec->itemsz, compare);
 }
