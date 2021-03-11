@@ -31,5 +31,7 @@ void vec_qsort(struct vector *vec, comparison_fn_t compare);
 void *vec_lfind(const struct vector *vec, const void *key,
                 comparison_fn_t compare);
 void *vec_lsearch(struct vector *vec, const void *key, comparison_fn_t compare);
+void *vec_bsearch(const struct vector *vec, const void *key,
+                  comparison_fn_t compare);
 
 #endif

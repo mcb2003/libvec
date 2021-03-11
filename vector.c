@@ -165,3 +165,10 @@ inline void *vec_lsearch(struct vector *vec, const void *key,
 
   return lsearch(key, vec->data, &vec->nmem, vec->itemsz, compare);
 }
+
+inline void *vec_bsearch(const struct vector *vec, const void *key,
+                         comparison_fn_t compare) {
+  assert(vec);
+
+  return bsearch(key, vec->data, vec->nmem, vec->itemsz, compare);
+}
