@@ -24,6 +24,7 @@ void *vec_push(struct vector *vec, const void *item);
 void *vec_pop(struct vector *vec, void *item);
 
 int vec_reserve(struct vector *vec, size_t capacity);
+int vec_truncate(struct vector *vec, size_t capacity);
 int vec_shrink(struct vector *vec);
 
 void vec_qsort(struct vector *vec, comparison_fn_t compare);

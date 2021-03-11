@@ -113,6 +113,22 @@ int vec_reserve(struct vector *vec, size_t capacity) {
   return capacity;
 }
 
+int vec_truncate(struct vector *vec, size_t capacity) {
+  assert(vec);
+
+  if (capacity >= vec->capacity)
+    // Already smaller than necessary
+    return vec->capacity;
+
+  void *data = reallocarray(vec->data, capacity, vec->itemsz);
+  if (!data)
+    return -1;
+
+  vec->data = data;
+  vec->capacity = capacity;
+  return capacity;
+}
+
 int vec_shrink(struct vector *vec) {
   assert(vec);
 
