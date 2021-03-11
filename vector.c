@@ -1,4 +1,5 @@
 #include <errno.h>
+#include <search.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -118,4 +119,10 @@ int vec_shrink(struct vector *vec) {
 
 inline void vec_sort(struct vector *vec, comparison_fn_t compare) {
   qsort(vec->data, vec->nmem, vec->itemsz, compare);
+}
+
+inline void *vec_find(const struct vector *vec, const void *key,
+                      comparison_fn_t compare) {
+  size_t nmem = vec->nmem;
+  return lfind(key, vec->data, &nmem, vec->itemsz, compare);
 }

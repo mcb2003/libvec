@@ -2,6 +2,9 @@
 #define LIBVEC_VECTOR_H
 #include <stddef.h>
 
+// A comparison function.
+// Glibc defines this for you, but I thaught it would be more portible to just
+// define it myself.
 typedef int (*comparison_fn_t)(const void *, const void *);
 
 struct vector {
@@ -24,5 +27,7 @@ int vec_reserve(struct vector *vec, size_t capacity);
 int vec_shrink(struct vector *vec);
 
 void vec_sort(struct vector *vec, comparison_fn_t compare);
+void *vec_find(const struct vector *vec, const void *key,
+               comparison_fn_t compare);
 
 #endif
