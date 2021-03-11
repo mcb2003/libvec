@@ -5,21 +5,26 @@ SOURCES = $(wildcard *.c)
 OBJECTS = ${SOURCES:.c=.o}
 	DEPS = $(OBJECTS:.o=.d)
 	HEADERS = $(wildcard *.h)
-LIBRARY = $(shell basename "${PWD}").a
+LIBRARY = $(shell basename "${PWD}")
 
-.PHONY: all release clean fmt
+.PHONY: all release static shared clean fmt
 
 all: CFLAGS += -DDEBUG -O0 -g
-all: ${LIBRARY}
+all: static shared
 
 release: CFLAGS += -O3
-release: ${LIBRARY}
+release: static shared
+	strip ${LIBRARY}.so
 
-${LIBRARY}: ${OBJECTS}
-	${AR} ${ARFLAGS} $@ $^
+static: ${OBJECTS}
+	${AR} ${ARFLAGS} ${LIBRARY}.a $^
+
+shared: LDFLAGS += -shared
+    shared: ${OBJECTS}
+	${LINK.C} -o ${LIBRARY}.so $^
 
 clean:
-	${RM} ${LIBRARY} ${OBJECTS} ${DEPS}
+	${RM} ${LIBRARY}.a ${LIBRARY}.so ${OBJECTS} ${DEPS}
 
 fmt: ${SOURCES} ${HEADERS}
 	clang-format -i $^
