@@ -1,4 +1,4 @@
-CFLAGS += -Wall -Wextra -Wsign-conversion -std=c18 -MD
+CFLAGS += -Wall -Wextra -Wsign-conversion -std=c18 -MD -D_DEFAULT_SOURCE
 ARFLAGS = rcs
 
 SOURCES = $(wildcard *.c)
