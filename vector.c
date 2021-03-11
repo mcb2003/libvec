@@ -115,3 +115,7 @@ int vec_shrink(struct vector *vec) {
   vec->capacity = vec->nmem;
   return 0;
 }
+
+inline void vec_sort(struct vector *vec, comparison_fn_t compare) {
+  qsort(vec->data, vec->nmem, vec->itemsz, compare);
+}

@@ -2,6 +2,8 @@
 #define LIBVEC_VECTOR_H
 #include <stddef.h>
 
+typedef int (*comparison_fn_t)(const void *, const void *);
+
 struct vector {
   void *data;
   size_t nmem;
@@ -20,5 +22,7 @@ void *vec_pop(struct vector *vec, void *item);
 
 int vec_reserve(struct vector *vec, size_t capacity);
 int vec_shrink(struct vector *vec);
+
+void vec_sort(struct vector *vec, comparison_fn_t compare);
 
 #endif
