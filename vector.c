@@ -75,3 +75,15 @@ void *vec_push(struct vector *vec, const void *item) {
   memcpy(pitem, item, vec->itemsz);
   return pitem;
 }
+
+void *vec_pop(struct vector *vec, void *item) {
+  if (vec->nmem == 0)
+    return NULL;
+
+  --(vec->nmem);
+  if (item) {
+    void *pitem = vec->data + ((vec->nmem) * vec->itemsz);
+    memcpy(item, pitem, vec->itemsz);
+  }
+  return item;
+}

@@ -16,5 +16,6 @@ void vec_free(struct vector *vec);
 void *vec_get(const struct vector *vec, size_t index);
 
 void *vec_push(struct vector *vec, const void *item);
+void *vec_pop(struct vector *vec, void *item);
 
 #endif
