@@ -154,3 +154,14 @@ inline void *vec_lfind(const struct vector *vec, const void *key,
   size_t nmem = vec->nmem;
   return lfind(key, vec->data, &nmem, vec->itemsz, compare);
 }
+
+inline void *vec_lsearch(struct vector *vec, const void *key,
+                         comparison_fn_t compare) {
+  assert(vec);
+
+  if (vec_reserve(vec, vec->nmem + 1) < 0)
+    // Reallocarray failed
+    return NULL;
+
+  return lsearch(key, vec->data, &vec->nmem, vec->itemsz, compare);
+}
