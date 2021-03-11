@@ -19,7 +19,7 @@ int vec_empty(struct vector *vec, size_t itemsz) {
 }
 
 // Helper function that finds the next power of 2
-size_t next_pow2(size_t n) {
+static size_t next_pow2(size_t n) {
   // Half of the total bits
   size_t bits = sizeof(size_t) * 4;
   --n;
