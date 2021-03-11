@@ -87,3 +87,13 @@ void *vec_pop(struct vector *vec, void *item) {
   }
   return item;
 }
+
+int vec_shrink(struct vector *vec) {
+  void *data = reallocarray(vec->data, vec->nmem, vec->itemsz);
+  if (!data)
+    return -1;
+
+  vec->data = data;
+  vec->capacity = vec->nmem;
+  return 0;
+}
