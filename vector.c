@@ -67,7 +67,12 @@ void *vec_push(struct vector *vec, const void *item) {
   if (vec->nmem + 1 > vec->capacity) {
     if (vec->capacity == 0)
       vec->capacity = 1;
-    vec->capacity *= 2;
+    // Calculate the new capacity
+    size_t old = vec->capacity;
+    vec->capacity = next_pow2(vec->capacity);
+    if (vec->capacity == old)
+      vec->capacity *= 2;
+
     if (!(vec->data = reallocarray(vec->data, vec->capacity, vec->itemsz)))
       return NULL;
   }
