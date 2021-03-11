@@ -26,8 +26,8 @@ void *vec_pop(struct vector *vec, void *item);
 int vec_reserve(struct vector *vec, size_t capacity);
 int vec_shrink(struct vector *vec);
 
-void vec_sort(struct vector *vec, comparison_fn_t compare);
-void *vec_find(const struct vector *vec, const void *key,
-               comparison_fn_t compare);
+void vec_qsort(struct vector *vec, comparison_fn_t compare);
+void *vec_lfind(const struct vector *vec, const void *key,
+                comparison_fn_t compare);
 
 #endif

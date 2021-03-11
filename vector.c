@@ -117,12 +117,12 @@ int vec_shrink(struct vector *vec) {
   return 0;
 }
 
-inline void vec_sort(struct vector *vec, comparison_fn_t compare) {
+inline void vec_qsort(struct vector *vec, comparison_fn_t compare) {
   qsort(vec->data, vec->nmem, vec->itemsz, compare);
 }
 
-inline void *vec_find(const struct vector *vec, const void *key,
-                      comparison_fn_t compare) {
+inline void *vec_lfind(const struct vector *vec, const void *key,
+                       comparison_fn_t compare) {
   size_t nmem = vec->nmem;
   return lfind(key, vec->data, &nmem, vec->itemsz, compare);
 }
