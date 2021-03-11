@@ -58,7 +58,9 @@ void *vec_get(const struct vector *vec, size_t index) {
   assert(vec);
 
   if (index >= vec->nmem)
+    // Out of range
     return NULL;
+
   return vec->data + (vec->itemsz * index);
 }
 
@@ -171,4 +173,23 @@ inline void *vec_bsearch(const struct vector *vec, const void *key,
   assert(vec);
 
   return bsearch(key, vec->data, vec->nmem, vec->itemsz, compare);
+}
+
+void *vec_swap_remove(struct vector *vec, size_t index, void *item) {
+  assert(vec);
+  assert(item);
+  void *pitem = vec_get(vec, index);
+  if (!pitem)
+    return NULL;
+
+  // Copy the desired item to the output
+  memcpy(item, pitem, vec->itemsz);
+  // Replace the item with the last item
+  void *last = vec_get(vec, vec->nmem - 1);
+  assert(last); // Should always have a last item, or we'd've already returned.
+  // Use memmove in case index also refers to the last item
+  memmove(pitem, last, vec->itemsz);
+  --(vec->nmem);
+
+  return item;
 }

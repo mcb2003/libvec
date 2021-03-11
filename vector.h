@@ -34,4 +34,6 @@ void *vec_lsearch(struct vector *vec, const void *key, comparison_fn_t compare);
 void *vec_bsearch(const struct vector *vec, const void *key,
                   comparison_fn_t compare);
 
+void *vec_swap_remove(struct vector *vec, size_t index, void *item);
+
 #endif
