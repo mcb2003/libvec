@@ -3,8 +3,8 @@
 
 #include <stddef.h>
 
-// A comparison function.
-// Glibc defines this for you, but I thaught it would be more portible to just
+// A comparison function for sorting and searching.
+// Glibc defines this for you, but it's more portible to just
 // define it myself.
 typedef int (*comparison_fn_t)(const void *, const void *);
 
@@ -15,7 +15,7 @@ struct vector {
   size_t itemsz;
 };
 
-int vec_empty(struct vector *vec, size_t itemsz);
+void vec_empty(struct vector *vec, size_t itemsz);
 int vec_prealloc(struct vector *vec, size_t capacity, size_t itemsz);
 void vec_free(struct vector *vec);
 
@@ -24,9 +24,9 @@ void *vec_get(const struct vector *vec, size_t index);
 void *vec_push(struct vector *vec, const void *item);
 void *vec_pop(struct vector *vec, void *item);
 
-int vec_reserve(struct vector *vec, size_t capacity);
-int vec_truncate(struct vector *vec, size_t capacity);
-int vec_shrink(struct vector *vec);
+ssize_t vec_reserve(struct vector *vec, size_t capacity);
+ssize_t vec_truncate(struct vector *vec, size_t capacity);
+ssize_t vec_shrink(struct vector *vec);
 
 void vec_qsort(struct vector *vec, comparison_fn_t compare);
 void *vec_lfind(const struct vector *vec, const void *key,

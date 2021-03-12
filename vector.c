@@ -6,7 +6,7 @@
 
 #include "vector.h"
 
-int vec_empty(struct vector *vec, size_t itemsz) {
+void vec_empty(struct vector *vec, size_t itemsz) {
   assert(vec);
   assert(itemsz > 0);
 
@@ -14,7 +14,6 @@ int vec_empty(struct vector *vec, size_t itemsz) {
   vec->nmem = 0;
   vec->capacity = 0;
   vec->itemsz = itemsz;
-  return 0;
 }
 
 // Helper function that finds the next power of 2
@@ -32,8 +31,10 @@ int vec_prealloc(struct vector *vec, size_t capacity, size_t itemsz) {
   assert(vec);
   assert(itemsz > 0);
 
-  if (capacity == 0)
-    return vec_empty(vec, itemsz);
+  if (capacity == 0) {
+    vec_empty(vec, itemsz);
+    return 0;
+  }
 
   // Round up allocations to powers of 2 for reallocation efficiency
   capacity = next_pow2(capacity);
@@ -105,12 +106,12 @@ void *vec_pop(struct vector *vec, void *item) {
   return item;
 }
 
-int vec_reserve(struct vector *vec, size_t capacity) {
+ssize_t vec_reserve(struct vector *vec, size_t capacity) {
   assert(vec);
 
   if (capacity <= vec->capacity)
     // Already larger than necessary
-    return vec->capacity;
+    return (ssize_t)vec->capacity;
 
   void *data = reallocarray(vec->data, capacity, vec->itemsz);
   if (!data)
@@ -118,15 +119,15 @@ int vec_reserve(struct vector *vec, size_t capacity) {
 
   vec->data = data;
   vec->capacity = capacity;
-  return capacity;
+  return (ssize_t)capacity;
 }
 
-int vec_truncate(struct vector *vec, size_t capacity) {
+ssize_t vec_truncate(struct vector *vec, size_t capacity) {
   assert(vec);
 
   if (capacity >= vec->capacity)
     // Already smaller than necessary
-    return vec->capacity;
+    return (ssize_t)vec->capacity;
 
   void *data = reallocarray(vec->data, capacity, vec->itemsz);
   if (!data)
@@ -134,10 +135,10 @@ int vec_truncate(struct vector *vec, size_t capacity) {
 
   vec->data = data;
   vec->capacity = capacity;
-  return capacity;
+  return (ssize_t)capacity;
 }
 
-int vec_shrink(struct vector *vec) {
+ssize_t vec_shrink(struct vector *vec) {
   assert(vec);
 
   void *data = reallocarray(vec->data, vec->nmem, vec->itemsz);
@@ -146,7 +147,7 @@ int vec_shrink(struct vector *vec) {
 
   vec->data = data;
   vec->capacity = vec->nmem;
-  return 0;
+  return (ssize_t)vec->capacity;
 }
 
 inline void vec_qsort(struct vector *vec, comparison_fn_t compare) {
