@@ -71,20 +71,24 @@ void *vec_push(struct vector *vec, const void *item) {
   assert(item);
 
   if (vec->nmem + 1 > vec->capacity) {
-    if (vec->capacity == 0)
-      vec->capacity = 1;
+    size_t capacity = vec->capacity;
+    if (capacity == 0)
+      capacity = 1;
     // Calculate the new capacity
-    size_t old = vec->capacity;
-    vec->capacity = next_pow2(vec->capacity);
-    if (vec->capacity == old)
-      vec->capacity *= 2;
+    capacity = next_pow2(capacity);
+    if (capacity == vec->capacity)
+      capacity *= 2;
 
-    if (!(vec->data = reallocarray(vec->data, vec->capacity, vec->itemsz)))
+    void *data = reallocarray(vec->data, capacity, vec->itemsz);
+    if (data) {
+      vec->data = data;
+      vec->capacity = capacity;
+    } else
       return NULL;
   }
-  void *pitem = vec->data + ((vec->nmem++) * vec->itemsz);
-  memcpy(pitem, item, vec->itemsz);
-  return pitem;
+  void *new = vec->data + ((vec->nmem++) * vec->itemsz);
+  memcpy(new, item, vec->itemsz);
+  return new;
 }
 
 void *vec_pop(struct vector *vec, void *item) {
