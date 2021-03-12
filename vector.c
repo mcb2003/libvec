@@ -64,6 +64,10 @@ void *vec_get(const struct vector *vec, size_t index) {
     // Out of range
     return NULL;
 
+  return vec_get_unchecked(vec, index);
+}
+
+inline void *vec_get_unchecked(const struct vector *vec, size_t index) {
   return vec->data + (vec->itemsz * index);
 }
 
@@ -100,7 +104,7 @@ void *vec_pop(struct vector *vec, void *item) {
 
   --(vec->nmem);
   if (item) {
-    void *pitem = vec->data + ((vec->nmem) * vec->itemsz);
+    void *pitem = vec_get_unchecked(vec, vec->nmem);
     memcpy(item, pitem, vec->itemsz);
   }
   return item;
