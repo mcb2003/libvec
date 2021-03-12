@@ -8,6 +8,7 @@
 
 int vec_empty(struct vector *vec, size_t itemsz) {
   assert(vec);
+  assert(itemsz > 0);
 
   vec->data = NULL;
   vec->nmem = 0;
@@ -29,6 +30,7 @@ __attribute__((const)) static size_t next_pow2(size_t n) {
 
 int vec_prealloc(struct vector *vec, size_t capacity, size_t itemsz) {
   assert(vec);
+  assert(itemsz > 0);
 
   if (capacity == 0)
     return vec_empty(vec, itemsz);

@@ -1,5 +1,6 @@
 #ifndef LIBVEC_VECTOR_H
 #define LIBVEC_VECTOR_H
+
 #include <stddef.h>
 
 // A comparison function.
@@ -15,7 +16,7 @@ struct vector {
 };
 
 int vec_empty(struct vector *vec, size_t itemsz);
-int vec_prealloc(struct vector *vec, size_t capacity, size_t size);
+int vec_prealloc(struct vector *vec, size_t capacity, size_t itemsz);
 void vec_free(struct vector *vec);
 
 void *vec_get(const struct vector *vec, size_t index);
