@@ -17,7 +17,7 @@ int vec_empty(struct vector *vec, size_t itemsz) {
 }
 
 // Helper function that finds the next power of 2
-static size_t next_pow2(size_t n) {
+__attribute__((const)) static size_t next_pow2(size_t n) {
   // Half of the total bits
   size_t bits = sizeof(size_t) * 4;
   --n;
@@ -177,13 +177,14 @@ inline void *vec_bsearch(const struct vector *vec, const void *key,
 
 void *vec_swap_remove(struct vector *vec, size_t index, void *item) {
   assert(vec);
-  assert(item);
   void *pitem = vec_get(vec, index);
   if (!pitem)
+    // Out of range
     return NULL;
 
-  // Copy the desired item to the output
-  memcpy(item, pitem, vec->itemsz);
+  // Copy the desired item to the output (if any)
+  if (item)
+    memcpy(item, pitem, vec->itemsz);
   // Replace the item with the last item
   void *last = vec_get(vec, vec->nmem - 1);
   assert(last); // Should always have a last item, or we'd've already returned.
