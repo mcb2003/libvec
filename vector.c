@@ -110,12 +110,8 @@ void *vec_pop(struct vector *vec, void *item) {
   return item;
 }
 
-ssize_t vec_reserve(struct vector *vec, size_t capacity) {
+ssize_t vec_realloc(struct vector *vec, size_t capacity) {
   assert(vec);
-
-  if (capacity <= vec->capacity)
-    // Already larger than necessary
-    return (ssize_t)vec->capacity;
 
   void *data = reallocarray(vec->data, capacity, vec->itemsz);
   if (!data)
@@ -124,6 +120,16 @@ ssize_t vec_reserve(struct vector *vec, size_t capacity) {
   vec->data = data;
   vec->capacity = capacity;
   return (ssize_t)capacity;
+}
+
+ssize_t vec_reserve(struct vector *vec, size_t capacity) {
+  assert(vec);
+
+  if (capacity <= vec->capacity)
+    // Already larger than necessary
+    return (ssize_t)vec->capacity;
+
+  return vec_realloc(vec, capacity);
 }
 
 ssize_t vec_truncate(struct vector *vec, size_t capacity) {
@@ -133,25 +139,13 @@ ssize_t vec_truncate(struct vector *vec, size_t capacity) {
     // Already smaller than necessary
     return (ssize_t)vec->capacity;
 
-  void *data = reallocarray(vec->data, capacity, vec->itemsz);
-  if (!data)
-    return -1;
-
-  vec->data = data;
-  vec->capacity = capacity;
-  return (ssize_t)capacity;
+  return vec_realloc(vec, capacity);
 }
 
-ssize_t vec_shrink(struct vector *vec) {
+inline ssize_t vec_shrink(struct vector *vec) {
   assert(vec);
 
-  void *data = reallocarray(vec->data, vec->nmem, vec->itemsz);
-  if (!data)
-    return -1;
-
-  vec->data = data;
-  vec->capacity = vec->nmem;
-  return (ssize_t)vec->capacity;
+  return vec_realloc(vec, vec->nmem);
 }
 
 inline void vec_qsort(struct vector *vec, comparison_fn_t compare) {

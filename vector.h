@@ -25,6 +25,7 @@ void *vec_get_unchecked(const struct vector *vec, size_t index);
 void *vec_push(struct vector *vec, const void *item);
 void *vec_pop(struct vector *vec, void *item);
 
+ssize_t vec_realloc(struct vector *vec, size_t capacity);
 ssize_t vec_reserve(struct vector *vec, size_t capacity);
 ssize_t vec_truncate(struct vector *vec, size_t capacity);
 ssize_t vec_shrink(struct vector *vec);
