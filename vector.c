@@ -45,13 +45,12 @@ ssize_t vec_prealloc(struct vector *vec, size_t capacity, size_t itemsz) {
 }
 
 void vec_free(struct vector *vec) {
-  if (!vec)
-    return;
-
-  free(vec->data);
-  vec->data = NULL;
-  vec->nmem = 0;
-  vec->capacity = 0;
+  if (vec) {
+    free(vec->data);
+    vec->data = NULL;
+    vec->nmem = 0;
+    vec->capacity = 0;
+  }
 }
 
 void *vec_get(const struct vector *vec, size_t index) {
