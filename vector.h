@@ -6,7 +6,9 @@
 // A comparison function for sorting and searching.
 // Glibc defines this for you, but it's more portible to just
 // define it myself.
+#ifndef __USE_GNU
 typedef int (*comparison_fn_t)(const void *, const void *);
+#endif
 
 struct vector {
   void *data;
