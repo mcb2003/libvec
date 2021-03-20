@@ -22,8 +22,8 @@ void vec_free(struct vector *vec);
 void *vec_get(const struct vector *vec, size_t index);
 void *vec_get_unchecked(const struct vector *vec, size_t index);
 
-void *vec_push(struct vector *vec, const void *item);
-void *vec_pop(struct vector *vec, void *item);
+void *vec_push(struct vector *restrict vec, const void *restrict item);
+void *vec_pop(struct vector *restrict vec, void *restrict item);
 
 ssize_t vec_realloc(struct vector *vec, size_t capacity);
 ssize_t vec_reserve(struct vector *vec, size_t capacity);
@@ -31,12 +31,14 @@ ssize_t vec_truncate(struct vector *vec, size_t capacity);
 ssize_t vec_shrink(struct vector *vec);
 
 void vec_qsort(struct vector *vec, comparison_fn_t compare);
-void *vec_lfind(const struct vector *vec, const void *key,
+void *vec_lfind(const struct vector *restrict vec, const void *restrict key,
                 comparison_fn_t compare);
-void *vec_lsearch(struct vector *vec, const void *key, comparison_fn_t compare);
-void *vec_bsearch(const struct vector *vec, const void *key,
+void *vec_lsearch(struct vector *restrict vec, const void *restrict key,
+                  comparison_fn_t compare);
+void *vec_bsearch(const struct vector *restrict vec, const void *restrict key,
                   comparison_fn_t compare);
 
-void *vec_swap_remove(struct vector *vec, size_t index, void *item);
+void *vec_swap_remove(struct vector *restrict vec, size_t index,
+                      void *restrict item);
 
 #endif

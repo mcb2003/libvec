@@ -71,7 +71,7 @@ inline void *vec_get_unchecked(const struct vector *vec, size_t index) {
   return vec->data + (vec->itemsz * index);
 }
 
-void *vec_push(struct vector *vec, const void *item) {
+void *vec_push(struct vector *restrict vec, const void *restrict item) {
   assert(vec);
   assert(item);
 
@@ -96,10 +96,11 @@ void *vec_push(struct vector *vec, const void *item) {
   return new;
 }
 
-void *vec_pop(struct vector *vec, void *item) {
+void *vec_pop(struct vector *restrict vec, void *restrict item) {
   assert(vec);
 
   if (vec->nmem == 0)
+    // No more items
     return NULL;
 
   --(vec->nmem);
@@ -154,15 +155,18 @@ inline void vec_qsort(struct vector *vec, comparison_fn_t compare) {
   qsort(vec->data, vec->nmem, vec->itemsz, compare);
 }
 
-inline void *vec_lfind(const struct vector *vec, const void *key,
-                       comparison_fn_t compare) {
+inline void *vec_lfind(const struct vector *restrict vec,
+                       const void *restrict key, comparison_fn_t compare) {
   assert(vec);
 
+  // We don't want `lfind` modifying the vector's nmem.
+  // I'm not entirely sure why this is even passed by reference other than
+  // possibly to be compatible with the signature of `lsearch`.
   size_t nmem = vec->nmem;
   return lfind(key, vec->data, &nmem, vec->itemsz, compare);
 }
 
-inline void *vec_lsearch(struct vector *vec, const void *key,
+inline void *vec_lsearch(struct vector *restrict vec, const void *restrict key,
                          comparison_fn_t compare) {
   assert(vec);
 
@@ -173,14 +177,15 @@ inline void *vec_lsearch(struct vector *vec, const void *key,
   return lsearch(key, vec->data, &vec->nmem, vec->itemsz, compare);
 }
 
-inline void *vec_bsearch(const struct vector *vec, const void *key,
-                         comparison_fn_t compare) {
+inline void *vec_bsearch(const struct vector *restrict vec,
+                         const void *restrict key, comparison_fn_t compare) {
   assert(vec);
 
   return bsearch(key, vec->data, vec->nmem, vec->itemsz, compare);
 }
 
-void *vec_swap_remove(struct vector *vec, size_t index, void *item) {
+void *vec_swap_remove(struct vector *restrict vec, size_t index,
+                      void *restrict item) {
   assert(vec);
   void *pitem = vec_get(vec, index);
   if (!pitem)
