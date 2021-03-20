@@ -27,7 +27,7 @@ __attribute__((const)) static size_t next_pow2(size_t n) {
   return n;
 }
 
-int vec_prealloc(struct vector *vec, size_t capacity, size_t itemsz) {
+ssize_t vec_prealloc(struct vector *vec, size_t capacity, size_t itemsz) {
   assert(vec);
   assert(itemsz > 0);
 
@@ -38,13 +38,10 @@ int vec_prealloc(struct vector *vec, size_t capacity, size_t itemsz) {
 
   // Round up allocations to powers of 2 for reallocation efficiency
   capacity = next_pow2(capacity);
-
-  if (!(vec->data = calloc(capacity, itemsz)))
-    return -1;
+  vec->data = NULL;
   vec->nmem = 0;
-  vec->capacity = capacity;
   vec->itemsz = itemsz;
-  return capacity;
+  return vec_realloc(vec, capacity);
 }
 
 void vec_free(struct vector *vec) {

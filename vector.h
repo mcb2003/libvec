@@ -2,6 +2,7 @@
 #define LIBVEC_VECTOR_H
 
 #include <stddef.h>
+#include <sys/types.h>
 
 // A comparison function for sorting and searching.
 // Glibc defines this for you, but it's more portible to just
@@ -16,7 +17,7 @@ struct vector {
 };
 
 void vec_empty(struct vector *vec, size_t itemsz);
-int vec_prealloc(struct vector *vec, size_t capacity, size_t itemsz);
+ssize_t vec_prealloc(struct vector *vec, size_t capacity, size_t itemsz);
 void vec_free(struct vector *vec);
 
 void *vec_get(const struct vector *vec, size_t index);
